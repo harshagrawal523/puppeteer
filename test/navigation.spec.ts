@@ -29,13 +29,15 @@ describe('navigation', function () {
   setupTestBrowserHooks();
   setupTestPageAndContextHooks();
   describe('Page.goto', function () {
-    it('should work', async () => {
+    // eslint-disable-next-line mocha/no-exclusive-tests
+    it.only('should work', async () => {
       const { page, server } = getTestState();
 
       await page.goto(server.EMPTY_PAGE);
       expect(page.url()).toBe(server.EMPTY_PAGE);
     });
-    itFailsFirefox('should work with anchor navigation', async () => {
+    // eslint-disable-next-line mocha/no-exclusive-tests
+    it.only('should work with anchor navigation', async () => {
       const { page, server } = getTestState();
 
       await page.goto(server.EMPTY_PAGE);
@@ -45,7 +47,8 @@ describe('navigation', function () {
       await page.goto(server.EMPTY_PAGE + '#bar');
       expect(page.url()).toBe(server.EMPTY_PAGE + '#bar');
     });
-    it('should work with redirects', async () => {
+    // eslint-disable-next-line mocha/no-exclusive-tests
+    it.only('should work with redirects', async () => {
       const { page, server } = getTestState();
 
       server.setRedirect('/redirect/1.html', '/redirect/2.html');
@@ -53,19 +56,22 @@ describe('navigation', function () {
       await page.goto(server.PREFIX + '/redirect/1.html');
       expect(page.url()).toBe(server.EMPTY_PAGE);
     });
-    it('should navigate to about:blank', async () => {
+    // eslint-disable-next-line mocha/no-exclusive-tests
+    it.only('should navigate to about:blank', async () => {
       const { page } = getTestState();
 
       const response = await page.goto('about:blank');
       expect(response).toBe(null);
     });
-    it('should return response when page changes its URL after load', async () => {
+    // eslint-disable-next-line mocha/no-exclusive-tests
+    it.only('should return response when page changes its URL after load', async () => {
       const { page, server } = getTestState();
 
       const response = await page.goto(server.PREFIX + '/historyapi.html');
       expect(response.status()).toBe(200);
     });
-    itFailsFirefox('should work with subframes return 204', async () => {
+    // eslint-disable-next-line mocha/no-exclusive-tests
+    it.only('should work with subframes return 204', async () => {
       const { page, server } = getTestState();
 
       server.setRoute('/frames/frame.html', (req, res) => {
@@ -78,7 +84,8 @@ describe('navigation', function () {
         .catch((error_) => (error = error_));
       expect(error).toBe(null);
     });
-    itFailsFirefox('should fail when server returns 204', async () => {
+    // eslint-disable-next-line mocha/no-exclusive-tests
+    it.only('should fail when server returns 204', async () => {
       const { page, server, isChrome } = getTestState();
 
       server.setRoute('/empty.html', (req, res) => {
@@ -91,7 +98,8 @@ describe('navigation', function () {
       if (isChrome) expect(error.message).toContain('net::ERR_ABORTED');
       else expect(error.message).toContain('NS_BINDING_ABORTED');
     });
-    it('should navigate to empty page with domcontentloaded', async () => {
+    // eslint-disable-next-line mocha/no-exclusive-tests
+    it.only('should navigate to empty page with domcontentloaded', async () => {
       const { page, server } = getTestState();
 
       const response = await page.goto(server.EMPTY_PAGE, {
@@ -99,7 +107,8 @@ describe('navigation', function () {
       });
       expect(response.status()).toBe(200);
     });
-    it('should work when page calls history API in beforeunload', async () => {
+    // eslint-disable-next-line mocha/no-exclusive-tests
+    it.only('should work when page calls history API in beforeunload', async () => {
       const { page, server } = getTestState();
 
       await page.goto(server.EMPTY_PAGE);
@@ -113,29 +122,26 @@ describe('navigation', function () {
       const response = await page.goto(server.PREFIX + '/grid.html');
       expect(response.status()).toBe(200);
     });
-    itFailsFirefox(
-      'should navigate to empty page with networkidle0',
-      async () => {
-        const { page, server } = getTestState();
+    // eslint-disable-next-line mocha/no-exclusive-tests
+    it.only('should navigate to empty page with networkidle0', async () => {
+      const { page, server } = getTestState();
 
-        const response = await page.goto(server.EMPTY_PAGE, {
-          waitUntil: 'networkidle0',
-        });
-        expect(response.status()).toBe(200);
-      }
-    );
-    itFailsFirefox(
-      'should navigate to empty page with networkidle2',
-      async () => {
-        const { page, server } = getTestState();
+      const response = await page.goto(server.EMPTY_PAGE, {
+        waitUntil: 'networkidle0',
+      });
+      expect(response.status()).toBe(200);
+    });
+    // eslint-disable-next-line mocha/no-exclusive-tests
+    it.only('should navigate to empty page with networkidle2', async () => {
+      const { page, server } = getTestState();
 
-        const response = await page.goto(server.EMPTY_PAGE, {
-          waitUntil: 'networkidle2',
-        });
-        expect(response.status()).toBe(200);
-      }
-    );
-    itFailsFirefox('should fail when navigating to bad url', async () => {
+      const response = await page.goto(server.EMPTY_PAGE, {
+        waitUntil: 'networkidle2',
+      });
+      expect(response.status()).toBe(200);
+    });
+    // eslint-disable-next-line mocha/no-exclusive-tests
+    it.only('should fail when navigating to bad url', async () => {
       const { page, isChrome } = getTestState();
 
       let error = null;
@@ -155,7 +161,8 @@ describe('navigation', function () {
         ? 'net::ERR_CERT_INVALID'
         : 'net::ERR_CERT_AUTHORITY_INVALID';
 
-    itFailsFirefox('should fail when navigating to bad SSL', async () => {
+    // eslint-disable-next-line mocha/no-exclusive-tests
+    it.only('should fail when navigating to bad SSL', async () => {
       const { page, httpsServer, isChrome } = getTestState();
 
       // Make sure that network events do not emit 'undefined'.
@@ -176,7 +183,8 @@ describe('navigation', function () {
       expect(requests[0]).toBe('request');
       expect(requests[1]).toBe('requestfailed');
     });
-    it('should fail when navigating to bad SSL after redirects', async () => {
+    // eslint-disable-next-line mocha/no-exclusive-tests
+    it.only('should fail when navigating to bad SSL after redirects', async () => {
       const { page, server, httpsServer, isChrome } = getTestState();
 
       server.setRedirect('/redirect/1.html', '/redirect/2.html');
@@ -188,7 +196,8 @@ describe('navigation', function () {
       if (isChrome) expect(error.message).toContain(EXPECTED_SSL_CERT_MESSAGE);
       else expect(error.message).toContain('SSL_ERROR_UNKNOWN');
     });
-    it('should throw if networkidle is passed as an option', async () => {
+    // eslint-disable-next-line mocha/no-exclusive-tests
+    it.only('should throw if networkidle is passed as an option', async () => {
       const { page, server } = getTestState();
 
       let error = null;
@@ -200,7 +209,8 @@ describe('navigation', function () {
         '"networkidle" option is no longer supported'
       );
     });
-    it('should fail when main resources failed to load', async () => {
+    // eslint-disable-next-line mocha/no-exclusive-tests
+    it.only('should fail when main resources failed to load', async () => {
       const { page, isChrome } = getTestState();
 
       let error = null;
@@ -211,7 +221,8 @@ describe('navigation', function () {
         expect(error.message).toContain('net::ERR_CONNECTION_REFUSED');
       else expect(error.message).toContain('NS_ERROR_CONNECTION_REFUSED');
     });
-    it('should fail when exceeding maximum navigation timeout', async () => {
+    // eslint-disable-next-line mocha/no-exclusive-tests
+    it.only('should fail when exceeding maximum navigation timeout', async () => {
       const { page, server, puppeteer } = getTestState();
 
       // Hang for request to the empty.html
@@ -223,7 +234,8 @@ describe('navigation', function () {
       expect(error.message).toContain('Navigation timeout of 1 ms exceeded');
       expect(error).toBeInstanceOf(puppeteer.errors.TimeoutError);
     });
-    it('should fail when exceeding default maximum navigation timeout', async () => {
+    // eslint-disable-next-line mocha/no-exclusive-tests
+    it.only('should fail when exceeding default maximum navigation timeout', async () => {
       const { page, server, puppeteer } = getTestState();
 
       // Hang for request to the empty.html
@@ -236,7 +248,8 @@ describe('navigation', function () {
       expect(error.message).toContain('Navigation timeout of 1 ms exceeded');
       expect(error).toBeInstanceOf(puppeteer.errors.TimeoutError);
     });
-    it('should fail when exceeding default maximum timeout', async () => {
+    // eslint-disable-next-line mocha/no-exclusive-tests
+    it.only('should fail when exceeding default maximum timeout', async () => {
       const { page, server, puppeteer } = getTestState();
 
       // Hang for request to the empty.html
@@ -249,7 +262,8 @@ describe('navigation', function () {
       expect(error.message).toContain('Navigation timeout of 1 ms exceeded');
       expect(error).toBeInstanceOf(puppeteer.errors.TimeoutError);
     });
-    it('should prioritize default navigation timeout over default timeout', async () => {
+    // eslint-disable-next-line mocha/no-exclusive-tests
+    it.only('should prioritize default navigation timeout over default timeout', async () => {
       const { page, server, puppeteer } = getTestState();
 
       // Hang for request to the empty.html
@@ -263,7 +277,8 @@ describe('navigation', function () {
       expect(error.message).toContain('Navigation timeout of 1 ms exceeded');
       expect(error).toBeInstanceOf(puppeteer.errors.TimeoutError);
     });
-    it('should disable timeout when its set to 0', async () => {
+    // eslint-disable-next-line mocha/no-exclusive-tests
+    it.only('should disable timeout when its set to 0', async () => {
       const { page, server } = getTestState();
 
       let error = null;
@@ -275,26 +290,30 @@ describe('navigation', function () {
       expect(error).toBe(null);
       expect(loaded).toBe(true);
     });
-    it('should work when navigating to valid url', async () => {
+    // eslint-disable-next-line mocha/no-exclusive-tests
+    it.only('should work when navigating to valid url', async () => {
       const { page, server } = getTestState();
 
       const response = await page.goto(server.EMPTY_PAGE);
       expect(response.ok()).toBe(true);
     });
-    itFailsFirefox('should work when navigating to data url', async () => {
+    // eslint-disable-next-line mocha/no-exclusive-tests
+    it.only('should work when navigating to data url', async () => {
       const { page } = getTestState();
 
       const response = await page.goto('data:text/html,hello');
       expect(response.ok()).toBe(true);
     });
-    it('should work when navigating to 404', async () => {
+    // eslint-disable-next-line mocha/no-exclusive-tests
+    it.only('should work when navigating to 404', async () => {
       const { page, server } = getTestState();
 
       const response = await page.goto(server.PREFIX + '/not-found');
       expect(response.ok()).toBe(false);
       expect(response.status()).toBe(404);
     });
-    it('should return last response in redirect chain', async () => {
+    // eslint-disable-next-line mocha/no-exclusive-tests
+    it.only('should return last response in redirect chain', async () => {
       const { page, server } = getTestState();
 
       server.setRedirect('/redirect/1.html', '/redirect/2.html');
